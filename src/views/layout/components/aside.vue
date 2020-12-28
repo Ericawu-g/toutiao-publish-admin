@@ -8,8 +8,12 @@
     text-color="#fff"
     active-text-color="#ffd04b"
     router
+    :collapse="isCollapse"
   >
-    <div class="logo"></div>
+    <div :class="{
+      logo: !isCollapse,
+      mlogo: isCollapse
+    }"></div>
     <el-menu-item index="/">
       <i class="iconfont iconHomehomepagemenu"></i>
       <span slot="title">首页</span>
@@ -44,6 +48,12 @@
 <script>
 export default {
   name: 'AppAside',
+  props: ['is-collapse'],
+  data () {
+    return {
+      // isCollapse: true
+    }
+  },
   methods: {
     handleOpen (key, keyPath) {
       console.log(key, keyPath)
@@ -60,12 +70,21 @@ export default {
   width: 100%;
   height: 60px;
   background: url('./logo_admin.png') no-repeat center;
-  background-size: 70% 57%;
+  background-size: 90% 65%;
+}
+.mlogo {
+  width: 100%;
+  height: 40px;
+  background: url('./mlogo.png') no-repeat center;
+  background-size: 60% 80%;
 }
 .nav-menu {
   .iconfont {
     margin-right: 10px;
     padding-left: 5px;
+  }
+  span {
+    padding-right: 70px;
   }
 }
 </style>

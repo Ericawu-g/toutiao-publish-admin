@@ -114,7 +114,7 @@ export default {
       // 2、实际工作中，接口非常容易变动
       // 建议把所有请求都封装成函数然后统一组织到模块中
       login(this.user).then(res => {
-        console.log(res)
+        // console.log(res)
         // 登陆成功
         this.$message({
           message: '登录成功',
@@ -123,6 +123,10 @@ export default {
 
         // 关闭登陆中loading
         this.loginLoading = false
+
+        // 将接口返回的用户相关数据放到本地存储，方便应用数据共享
+        // 本地存储只能存字符串，所以要用JSON.stringify转
+        window.localStorage.setItem('user', JSON.stringify(res.data.data))
 
         // 跳转到首页
         this.$router.push('/')

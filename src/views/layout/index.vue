@@ -1,12 +1,19 @@
 <template>
   <el-container class="layout-container">
-    <el-aside width="200px">
-      <app-aside class="aside-menu" />
+    <el-aside width='auto'>
+      <app-aside class="aside-menu" :is-collapse="isCollapse"/>
     </el-aside>
     <el-container>
       <el-header class="header">
         <div>
-          <i class="el-icon-s-fold"></i>
+          <!-- class样式处理{
+            css类名：布尔值
+          } -->
+          <i
+            :class="{
+              'el-icon-s-fold': isCollapse,
+              'el-icon-s-unfold': !isCollapse
+          }" @click="isCollapse = !isCollapse"></i>
           <span>江苏传智播客科技教育有限公司</span>
         </div>
         <el-dropdown>
@@ -20,7 +27,10 @@
               <i class="el-icon-setting"></i>
               <span>个人设置</span>
             </el-dropdown-item>
-            <el-dropdown-item>
+            <!--
+              组件默认不识别原生事件，除非内部做了处理
+             -->
+            <el-dropdown-item @click.native="onLogout">
               <i class="iconfont iconsuokai"></i>
               <span>退出登录</span>
             </el-dropdown-item>
@@ -46,7 +56,8 @@ export default {
   },
   data () {
     return {
-      user: {} // 当前登录用户信息
+      user: {}, // 当前登录用户信息
+      isCollapse: false // 侧边栏展开状态
     }
   },
   created () {
@@ -58,6 +69,24 @@ export default {
     loadUserProfile () {
       getUserProfile().then(res => {
         this.user = res.data.data
+      })
+    },
+
+    onLogout () {
+      this.$confirm('确认退出吗?', '退出提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 把用户的登录状态清除
+        window.localStorage.removeItem('user')
+        // 跳转到登录页面
+        this.$router.push('/login')
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消退出'
+        })
       })
     }
   }
@@ -88,8 +117,6 @@ export default {
     }
   }
   .el-aside {
-    width: 20px;
-    background-color: #d3dce6;
     color: #333;
     .aside-menu {
       height: 100%;
@@ -98,7 +125,6 @@ export default {
   .el-main {
     background-color: #fff;
     color: #333;
-    text-align: center;
   }
 }
 </style>
