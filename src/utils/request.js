@@ -2,10 +2,22 @@
  * 基于axios封装的请求模块
  */
 import axios from 'axios'
+import JSONbig from 'json-bigint'
 
 // 创建一个axios实例
 const request = axios.create({
-  baseURL: 'http://api-toutiao-web.itheima.net/' // 请求的基础路径
+  baseURL: 'http://api-toutiao-web.itheima.net/', // 请求的基础路径
+  // 定制后端返回的原始数据的处理
+  // 参数data就是后端返回的原始数据
+  transformResponse: [function (data) {
+    // axios默认在内部使用JSON.parse来转换处理原始数据
+    try {
+      return JSONbig.parse(data)
+    } catch (err) {
+      console.log('转换失败', err)
+      return data
+    }
+  }]
 })
 
 // 请求拦截器

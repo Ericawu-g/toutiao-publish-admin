@@ -15,3 +15,20 @@ export const getArticle = params => {
     params
   })
 }
+
+// 获取文章频道
+export const getArticleChannels = () => {
+  return request({
+    method: 'GET',
+    url: '/mp/v1_0/channels'
+  })
+}
+
+// 删除文章
+export const deleteArticle = articleId => {
+  return request({
+    method: 'DELETE',
+    // 接口文档中的路径参数需要在url中传递
+    url: `/mp/v1_0/articles/${articleId}`
+  })
+}
