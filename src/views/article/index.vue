@@ -105,7 +105,7 @@
         <el-table-column label="操作">
           <!-- 如果需要自定义表格列模板，则把需要自动以的内容放到 -->
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" circle icon="el-icon-edit"></el-button>
+            <el-button type="primary" size="mini" circle icon="el-icon-edit" @click="$router.push('/publish?id='+scope.row.id)"></el-button>
             <el-button size="mini" type="danger" circle icon="el-icon-delete" @click="onDeleteArticle(scope.row.id)"></el-button>
           </template>
           </el-table-column>
@@ -130,7 +130,7 @@
 
 <script>
 import {
-  getArticle,
+  getArticles,
   getArticleChannels,
   deleteArticle
 } from '@/api/article'
@@ -175,7 +175,7 @@ export default {
     loadArticles (page = 1) {
       // 展示加载中loading
       this.loading = true
-      getArticle({
+      getArticles({
         page,
         per_page: this.pageSize,
         status: this.status,
