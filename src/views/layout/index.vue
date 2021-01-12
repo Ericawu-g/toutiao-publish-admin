@@ -48,6 +48,7 @@
 <script>
 import AppAside from './components/aside'
 import { getUserProfile } from '@/api/user'
+import globalBus from '@/utils/global-bus'
 
 export default {
   name: 'LayoutIndex',
@@ -63,6 +64,11 @@ export default {
   created () {
     // 组件初始化好，请求获取用户资料
     this.loadUserProfile()
+
+    globalBus.$on('update-user', data => {
+      this.user.name = data.name
+      this.user.photo = data.photo
+    })
   },
   methods: {
     // 除了登录接口，其它所有接口都需要授权才能请求使用

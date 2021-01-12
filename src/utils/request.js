@@ -3,6 +3,8 @@
  */
 import axios from 'axios'
 import JSONbig from 'json-bigint'
+import router from '@/router'
+import { Message } from 'element-ui'
 
 // 创建一个axios实例
 const request = axios.create({
@@ -32,6 +34,27 @@ request.interceptors.request.use(function (config) {
   return config
 }, function (error) {
   // 请求失败，会经过这里
+  return Promise.reject(error)
+})
+
+// 响应拦截器
+request.interceptors.response.use(function (response) {
+  return response
+}, function (error) {
+  if (error.response && error.response.status === 401) {
+    // 清除本地存储中的用户登录状态
+    window.localStorage.removeItem('user')
+    router.push('/login')
+    Message.error('登录状态无效，请重新登录')
+  } else if (error.response.status === 403) {
+    // 没有操作权限
+    Message('没有操作权限')
+  } else if (error.response.status >= 500) {
+    // 服务端错误
+    Message.error('服务端内部异常，请稍后重试')
+  } else if (error.response.status === 400) {
+    Message('参数错误')
+  }
   return Promise.reject(error)
 })
 
